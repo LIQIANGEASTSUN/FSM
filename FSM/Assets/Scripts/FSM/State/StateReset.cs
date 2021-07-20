@@ -16,10 +16,10 @@ public class StateReset : StateBase
 
     public override void OnExecute()
     {
-        // 每帧体力恢复 0.5f
-        _player.Energy(-0.5f);
+        // 每帧体力恢复 2.5f
+        _player.Energy(2.5f);
         // 每帧饥饿感增加 0.02f
-        _player.SenseHunger(0.02f);
+        _player.SenseHunger(0.2f);
     }
 
     public override void OnExit()

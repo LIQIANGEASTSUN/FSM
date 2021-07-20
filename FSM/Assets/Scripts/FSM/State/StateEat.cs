@@ -21,7 +21,7 @@ public class StateEat : StateBase
     public override void OnExecute()
     {
         // 吃饭降低饥饿感
-        _player.SenseHunger(-0.5f);
+        _player.SenseHunger(-2.5f);
         Debug.Log(_player._senseHunger + "    " + Time.realtimeSinceStartup + "   " + ++count + "    " + Time.deltaTime);
     }
 

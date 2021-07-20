@@ -4,16 +4,16 @@ using UnityEngine;
 public class Player
 {
     private StateMachine _stateMachine;
-    // 饥饿感：饥饿感 >= 80 认为饿了
+    // 饥饿感：饥饿感 >= 8 认为饿了
     public float _senseHunger = 0;
     // 作业量：作业量 <= 0 时，作业写完了
-    public float _homeWorkCount = 100;
-    // 该写作业的强迫值：值 >= 20 就该写作业了
-    public float _needHomeWork = 10;
-    // 要去打篮球的渴望值：值 >= 20 就该打篮球了
-    public float _wantBasketball = 5;
-    // 精力：精力 <= 10 累了
-    public float _energy = 100;
+    public float _homeWorkCount = 10;
+    // 该写作业的强迫值：值 >= 10 就该写作业了
+    public float _needHomeWork = 0;
+    // 要去打篮球的渴望值：值 >= 10 就该打篮球了
+    public float _wantBasketball = 0;
+    // 精力：精力 <= 1 累了
+    public float _energy = 10;
 
     public Player()
     {
@@ -146,18 +146,18 @@ public class Player
     private float _interval = 1;
     public void Update()
     {
-        //_interval -= Time.deltaTime;
-        //if (_interval >= 0)
-        //{
-        //    return;
-        //}
-        //_interval = 1;
+        _interval -= Time.deltaTime;
+        if (_interval >= 0)
+        {
+            return;
+        }
+        _interval = 1;
         _stateMachine.OnExecute();
         
-        SenseHunger(0.05f);
-        NeedHomeWork(0.2f);
-        WantBasketball(0.1f);
-        Energy(0.02f);
+        SenseHunger(1);
+        NeedHomeWork(1.5f);
+        WantBasketball(1f);
+        Energy(-1);
     }
 
     // 饥饿感变化，任何时刻都在消耗能量，饥饿感不断上升
@@ -173,7 +173,7 @@ public class Player
     // 做作业
     public void DoHomeWork(float value)
     {
-        _homeWorkCount -= value;
+        _homeWorkCount += value;
         _homeWorkCount = Mathf.Clamp(_homeWorkCount, 0, 100);
         _stateMachine.UpdateParameter("HomeWorkDone", _homeWorkCount);
     }
@@ -195,7 +195,7 @@ public class Player
     // 能量，写作业和打篮球会消耗能量，休息增加能量
     public void Energy(float value)
     {
-        _energy -= value;
+        _energy += value;
         _wantBasketball = Mathf.Clamp(_energy, 0, 100);
         _stateMachine.UpdateParameter("Tire", _energy);
     }
