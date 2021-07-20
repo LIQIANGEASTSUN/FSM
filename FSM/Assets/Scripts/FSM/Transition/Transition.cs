@@ -18,6 +18,7 @@ public class Transition
 
     public Transition(StateEnum toState, List<Parameter> parameterList)
     {
+        ToState = toState;
         _parameterList = parameterList;
     }
 

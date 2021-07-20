@@ -14,20 +14,22 @@ public class StateEat : StateBase
 
     public override void OnEnter()
     {
-        Debug.Log("开始吃饭啦:" + _player._senseHunger + "   time:"+ Time.realtimeSinceStartup);
+        Debug.Log("吃饭开始啦time:"+ Time.realtimeSinceStartup);
     }
 
-    private int count = 0;
     public override void OnExecute()
     {
-        // 吃饭降低饥饿感
+        // 饥饿感增量
         _player.SenseHunger(-2.5f);
-        Debug.Log(_player._senseHunger + "    " + Time.realtimeSinceStartup + "   " + ++count + "    " + Time.deltaTime);
+        // 要写作业的强迫性增量
+        _player.NeedHomeWork(1.5f);
+        // 想打篮球的渴望度增量
+        _player.WantBasketball(1);
     }
 
     public override void OnExit()
     {
-        Debug.Log("吃的好饱啊，不吃了，刷碗、刷锅，擦桌子，打扫厨房:" + _player._senseHunger + "   time:" + Time.realtimeSinceStartup);
+        Debug.Log("吃饭结束啦吃的好饱啊打扫厨房time:" + Time.realtimeSinceStartup);
     }
 
     private bool EatToReset()
