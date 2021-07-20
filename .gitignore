@@ -1,8 +1,8 @@
-HSM/Library/*
-HSM/obj/*
-HSM/Temp/*
+FSM/Library/*
+FSM/obj/*
+FSM/Temp/*
 
-HSM/.vs/*
+FSM/.vs/*
 
 *.csproj
 
