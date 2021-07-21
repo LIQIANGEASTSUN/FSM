@@ -75,4 +75,44 @@ public class Player
         _energy = Mathf.Clamp(_energy + value * Time.deltaTime, 0, 10);
         _stateMachine.UpdateParameter("Energy", _energy);
     }
+
+    private Dictionary<StateEnum, Vector3> _positionDic = new Dictionary<StateEnum, Vector3>();
+    private Transform _player;
+    public bool MoveTo(StateEnum stateEnum)
+    {
+        if (null == _player)
+        {
+            GameObject p = GameObject.Find("Player");
+            _player = p.transform;
+        }
+
+        Vector3 position;
+        if (!_positionDic.TryGetValue(stateEnum, out position))
+        {
+            if (stateEnum == StateEnum.EAT)
+            {
+                position = GameObject.Find("Eat").transform.position;
+            }
+            else if (stateEnum == StateEnum.RESET)
+            {
+                position = GameObject.Find("Reset").transform.position;
+            }
+            else if (stateEnum == StateEnum.BASKETBALL)
+            {
+                position = GameObject.Find("Basketball").transform.position;
+            }
+            else if (stateEnum == StateEnum.HOMEWORK)
+            {
+                position = GameObject.Find("HomeWork").transform.position;
+            }
+        }
+
+        if (Vector3.Distance(_player.position, position) <= 0.5f)
+        {
+            return true;
+        }
+
+        _player.Translate((position - _player.position).normalized * Time.deltaTime * 2, Space.World);
+        return Vector3.Distance(_player.position, position) <= 0.5f;
+    }
 }

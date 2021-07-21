@@ -15,7 +15,11 @@ public class StateHomeWork : StateBase
     }
 
     public override void OnExecute()
-    { 
+    {
+        if (!_player.MoveTo(StateEnum.HOMEWORK))
+        {
+            return;
+        }
         // 饥饿感增量
         _player.SenseHunger(0.65f);
         // 作业量增量

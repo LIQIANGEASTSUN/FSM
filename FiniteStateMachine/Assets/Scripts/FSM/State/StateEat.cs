@@ -19,6 +19,11 @@ public class StateEat : StateBase
 
     public override void OnExecute()
     {
+        if (!_player.MoveTo(StateEnum.EAT))
+        {
+            return;
+        }
+
         // 饥饿感增量
         _player.SenseHunger(-2.5f);
         // 要写作业的强迫性增量

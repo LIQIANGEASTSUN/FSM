@@ -16,6 +16,10 @@ public class StateReset : StateBase
 
     public override void OnExecute()
     {
+        if (!_player.MoveTo(StateEnum.RESET))
+        {
+            return;
+        }
         // 饥饿感增量
         _player.SenseHunger(0.6f);
         // 要写作业的强迫性增量

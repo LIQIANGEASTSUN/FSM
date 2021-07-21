@@ -16,6 +16,10 @@ public class StateBasketball : StateBase
 
     public override void OnExecute()
     {
+        if (!_player.MoveTo(StateEnum.BASKETBALL))
+        {
+            return;
+        }
         // 饥饿感增量
         _player.SenseHunger(0.7f);
         // 要写作业的强迫性增量
