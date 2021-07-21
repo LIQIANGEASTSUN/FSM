@@ -9,7 +9,7 @@ public enum StateEnum
 
     RESET = 1,      // 休息
 
-    BASKETBALL = 2, // 休息
+    BASKETBALL = 2, // 打篮球
 
     HOMEWORK = 3,   // 写作业
 }
