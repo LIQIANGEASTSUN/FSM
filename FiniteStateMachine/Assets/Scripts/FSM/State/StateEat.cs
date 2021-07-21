@@ -25,6 +25,8 @@ public class StateEat : StateBase
         _player.NeedHomeWork(1.5f);
         // 想打篮球的渴望度增量
         _player.WantBasketball(1);
+        // 体力增量
+        _player.Energy(-0.2f);
     }
 
     public override void OnExit()
@@ -32,6 +34,7 @@ public class StateEat : StateBase
         Debug.Log("吃饭结束啦吃的好饱啊打扫厨房time:" + Time.realtimeSinceStartup);
     }
 
+    // 有些不方便使用参数值类型判断的逻辑，可以直接将函数作为 Transition的条件
     private bool EatToReset()
     {
         return _player._senseHunger <= 1;

@@ -1,0 +1,10 @@
+﻿ID,CurrentState,ToState,Transition,Name1,Type1,Value1,Compare1,Name2,Type2,Value2,Compare2
+100,0,1,吃饭转换到休息条件：Hunger(饥饿感 float值 ) < 1,Hunger,2,1,2,,0,,0
+101,1,0,休息转换到吃饭条件：Hunger(饥饿感 float值 ) > 8Energy (精力 float 值) > 9.5,Hunger,2,8,1,Energy,2,9.5,1
+102,1,2,休息转换到打篮球条件：WantBasketball(渴望打篮球 float值) > 8Energy (精力 float 值) > 9.5,WantBasketball,2,8,1,Energy,2,9.5,1
+103,1,3,休息转换到写作业条件：NeedHomeWork(写作业强迫 float值) > 8Energy (精力 float 值) > 9.5,NeedHomeWork,2,8,1,Energy,2,9.5,1
+104,2,0,打篮球转换到吃饭条件：Hunger(饥饿感 float值 ) > 8,Hunger,2,8,1,,0,,0
+105,2,1,打篮球转换到休息条件：Energy (精力 float 值) < 1,Energy,2,1,2,,0,,0
+106,2,3,打篮球转换到写作业条件：NeedHomeWork(写作业强迫 float值) > 8WantBasketball(渴望打篮球 float值) < 1,NeedHomeWork,2,8,1,WantBasketball,2,1,2
+107,3,1,写作业转换到休息条件：Energy (精力 float 值) < 1,Energy,2,1,2,,0,,0
+108,3,2,写作业转换到打篮球条件：HomeWorkDone(作业量 float) < 1,HomeWorkDone,2,1,2,,0,,0

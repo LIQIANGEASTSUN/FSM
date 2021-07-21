@@ -23,7 +23,6 @@ public class Transition
     }
 
     public StateEnum ToState { get; set; }
-    public TransitionEnum TransitionEnum { get; set; }
 
     public List<Parameter> ParameterList
     {
@@ -38,13 +37,6 @@ public class Transition
         }
         return _transitionCallback();
     }
-}
-
-public enum TransitionEnum
-{
-    EVENT = 0,     // 事件类型
-
-    PARAMETER = 1, // 参数类型
 }
 
 // 条件参数

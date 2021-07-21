@@ -24,6 +24,8 @@ public class Player
         }
         // 默认开始在休息状态
         _stateMachine.TransitionState(StateEnum.RESET);
+        // 设置这个人的有限状态机配置文件
+        _stateMachine.SetConfigFile("FSM");
 
         // 初始化环境变量
         SenseHunger(0);
@@ -33,15 +35,8 @@ public class Player
         Energy(0);
     }
 
-    private float _interval = 1;
     public void Update()
     {
-        _interval -= Time.deltaTime;
-        if (_interval >= 0)
-        {
-            return;
-        }
-        _interval = 1;
         _stateMachine.OnExecute();
     }
 
@@ -49,40 +44,35 @@ public class Player
     // 吃东西降饥饿感
     public void SenseHunger(float value)
     {
-        _senseHunger += value;
-        _senseHunger = Mathf.Clamp(_senseHunger, 0, 10);
+        _senseHunger = Mathf.Clamp(_senseHunger + value * Time.deltaTime, 0, 10);
         _stateMachine.UpdateParameter("Hunger", _senseHunger);
-        //Debug.LogError(_senseHunger);
     }
 
-    // 做作业
+    // 作业量增量
     public void DoHomeWork(float value)
     {
-        _homeWorkCount += value;
-        _homeWorkCount = Mathf.Clamp(_homeWorkCount, 0, 10);
+        _homeWorkCount = Mathf.Clamp(_homeWorkCount + value * Time.deltaTime, 0, 10); ;
         _stateMachine.UpdateParameter("HomeWorkDone", _homeWorkCount);
     }
 
+    // 写作业的强迫性增量
     public void NeedHomeWork(float value)
     {
-        _needHomeWork += value;
-        _needHomeWork = Mathf.Clamp(_needHomeWork, 0, 10);
+        _needHomeWork = Mathf.Clamp(_needHomeWork + value * Time.deltaTime, 0, 10);
         _stateMachine.UpdateParameter("NeedHomeWork", _needHomeWork);
     }
 
+    // 打篮球渴望度增量
     public void WantBasketball(float value)
     {
-        _wantBasketball += value;
-        _wantBasketball = Mathf.Clamp(_wantBasketball, 0, 10);
+        _wantBasketball = Mathf.Clamp(_wantBasketball + value * Time.deltaTime, 0, 10);
         _stateMachine.UpdateParameter("WantBasketball", _wantBasketball);
     }
 
-    // 能量，写作业和打篮球会消耗能量，休息增加能量
+    // 精力增量
     public void Energy(float value)
     {
-        _energy += value;
-        _energy = Mathf.Clamp(_energy, 0, 100);
+        _energy = Mathf.Clamp(_energy + value * Time.deltaTime, 0, 10);
         _stateMachine.UpdateParameter("Energy", _energy);
     }
-
 }

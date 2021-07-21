@@ -1,8 +1,8 @@
-FSM/Library/*
-FSM/obj/*
-FSM/Temp/*
+FiniteStateMachine/Library/*
+FiniteStateMachine/obj/*
+FiniteStateMachine/Temp/*
 
-FSM/.vs/*
+FiniteStateMachine/.vs/*
 
 *.csproj
 
