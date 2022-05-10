@@ -18,10 +18,32 @@ public class Player
     public Player()
     {
         _stateMachine = new StateMachine();
-        foreach(var kv in _stateMachine.StateDic)
+
+        
+
+        foreach (var kv in _stateMachine.StateDic)
         {
-            kv.Value.SetPlayer(this);
+            PlayerStateBase stateBase = kv.Value as PlayerStateBase;
+            stateBase.SetPlayer(this);
         }
+
+        StateEat stateEat = new StateEat();
+        stateEat.SetPlayer(this);
+        // 初始化状态、并存储
+        _stateMachine.AddState(stateEat);
+
+        StateReset stateReset = new StateReset();
+        stateReset.SetPlayer(this);
+        _stateMachine.AddState(stateReset);
+
+        StateBasketball stateBasketball = new StateBasketball();
+        stateBasketball.SetPlayer(this);
+        _stateMachine.AddState(stateBasketball);
+
+        StateHomeWork stateHomeWork = new StateHomeWork();
+        stateHomeWork.SetPlayer(this);
+        _stateMachine.AddState(stateHomeWork);
+
         // 默认开始在休息状态
         _stateMachine.TransitionState(StateEnum.RESET);
         // 设置这个人的有限状态机配置文件

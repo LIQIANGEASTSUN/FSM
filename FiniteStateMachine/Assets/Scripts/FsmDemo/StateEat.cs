@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateEat : StateBase
+public class StateEat : PlayerStateBase
 {
     public StateEat()
     {

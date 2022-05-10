@@ -3,17 +3,17 @@ using System;
 
 public abstract class StateBase
 {
-    protected Player _player;
     // 当前类型
     protected StateEnum _state;
     protected List<Transition> _transitionList = new List<Transition>();
+    protected System.Object _transitionObj = null;
 
-    public StateBase(){
+    public StateBase()
+    {
     }
 
-    public void SetPlayer(Player player)
+    public virtual void TransitionData(System.Object obj)
     {
-        _player = player;
     }
 
     // 进入该状态
@@ -35,4 +35,10 @@ public abstract class StateBase
     {
         get { return _transitionList; }
     }
+
+    public System.Object TransitionObj
+    {
+        get { return _transitionObj; }
+    }
+
 }

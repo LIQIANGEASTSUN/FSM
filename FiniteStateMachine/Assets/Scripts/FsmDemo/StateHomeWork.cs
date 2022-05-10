@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateHomeWork : StateBase
+public class StateHomeWork : PlayerStateBase
 {
     public StateHomeWork()
     {

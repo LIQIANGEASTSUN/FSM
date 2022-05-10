@@ -1,16 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-
-public enum StateEnum
-{
-    EAT = 0,        // 吃饭
-
-    RESET = 1,      // 休息
-
-    BASKETBALL = 2, // 打篮球
-
-    HOMEWORK = 3,   // 写作业
-}
+using GraphicTree;
 
 public class StateMachine
 {
@@ -19,15 +9,16 @@ public class StateMachine
     // 记录当前状态
     private StateBase _currentState;
     // 环境变量
-    private Dictionary<string, Parameter> _parameterDic = new Dictionary<string, Parameter>();
+    private Dictionary<string, NodeParameter> _parameterDic = new Dictionary<string, NodeParameter>();
 
     public StateMachine()
     {
-        // 初始化状态、并存储
-        _stateDic[StateEnum.EAT] = new StateEat();
-        _stateDic[StateEnum.RESET] = new StateReset();
-        _stateDic[StateEnum.BASKETBALL] = new StateBasketball();
-        _stateDic[StateEnum.HOMEWORK] = new StateHomeWork();
+
+    }
+
+    public void AddState(StateBase stateBase)
+    {
+        _stateDic.Add(stateBase.State, stateBase);
     }
 
     public Dictionary<StateEnum, StateBase> StateDic
@@ -51,8 +42,15 @@ public class StateMachine
             CurrentState.OnExit();
         }
 
+        System.Object transitionObj = null;
+        if (null != CurrentState)
+        {
+            transitionObj = CurrentState.TransitionObj;
+        }
+
         // 令当前状态等于转换的新状态
         CurrentState = _stateDic[stateEnum];
+        CurrentState.TransitionData(transitionObj);
         // 转换的新状态执行 进入方法
         CurrentState.OnEnter();
         CurrentState.OnExecute();
@@ -88,10 +86,16 @@ public class StateMachine
         }
         for (int i = 0; i < transition.ParameterList.Count; ++i)
         {
-            Parameter parameter = transition.ParameterList[i];
-            Parameter environment = null;
-            if (!_parameterDic.TryGetValue(parameter._parameterName, out environment)
-                || !ConditionCompare.CompareParameter(environment, parameter))
+            NodeParameter parameter = transition.ParameterList[i];
+            NodeParameter environment = null;
+            if (!_parameterDic.TryGetValue(parameter.parameterName, out environment))
+            {
+                return false;
+            }
+
+            ParameterCompare compare = ParameterCompareTool.Compare(environment, parameter);
+            int value = (parameter.compare) & (int)compare;
+            if (value <= 0)
             {
                 return false;
             }
@@ -102,42 +106,42 @@ public class StateMachine
     // 更新环境变量的值
     public void UpdateParameter(string parameterName, int intValue)
     {
-        Parameter parameter = GetParameter(parameterName);
-        parameter._parameterType = ParameterType.Int;
+        NodeParameter parameter = GetParameter(parameterName);
+        parameter.parameterType = (int)ParameterType.Int;
         parameter.intValue = intValue;
     }
 
     // 更新环境变量的值
     public void UpdateParameter(string parameterName, float floatValue)
     {
-        Parameter parameter = GetParameter(parameterName);
-        parameter._parameterType = ParameterType.Float;
+        NodeParameter parameter = GetParameter(parameterName);
+        parameter.parameterType = (int)ParameterType.Float;
         parameter.floatValue = floatValue;
     }
 
     // 更新环境变量的值
     public void UpdateParameter(string parameterName, bool boolValue)
     {
-        Parameter parameter = GetParameter(parameterName);
-        parameter._parameterType = ParameterType.Bool;
+        NodeParameter parameter = GetParameter(parameterName);
+        parameter.parameterType = (int)ParameterType.Bool;
         parameter.boolValue = boolValue;
     }
 
     // 更新环境变量的值
     public void UpdateParameter(string parameterName, string stringValue)
     {
-        Parameter parameter = GetParameter(parameterName);
-        parameter._parameterType = ParameterType.String;
+        NodeParameter parameter = GetParameter(parameterName);
+        parameter.parameterType = (int)ParameterType.String;
         parameter.stringValue = stringValue;
     }
 
     // 获取环境变量
-    private Parameter GetParameter(string parameterName)
+    private NodeParameter GetParameter(string parameterName)
     {
-        Parameter parameter = null;
+        NodeParameter parameter = null;
         if (!_parameterDic.TryGetValue(parameterName, out parameter))
         {
-            parameter = new Parameter();
+            parameter = new NodeParameter();
             _parameterDic[parameterName] = parameter;
         }
         return parameter;
@@ -165,7 +169,7 @@ public class StateMachine
         int currentState = int.Parse(TableRead.Instance.GetData(fileName, key, "CurrentState"));
         int toState = int.Parse(TableRead.Instance.GetData(fileName, key, "ToState"));
 
-        List<Parameter> parameterList = new List<Parameter>();
+        List<NodeParameter> parameterList = new List<NodeParameter>();
         for (int i = 1; i <= 2; ++i)
         {
             string name = TableRead.Instance.GetData(fileName, key, string.Format("Name{0}", i));
@@ -173,28 +177,33 @@ public class StateMachine
             {
                 continue;
             }
-            Parameter parameter = new Parameter();
-            parameter._parameterName = name;
-            parameter._parameterType = (ParameterType)(int.Parse(TableRead.Instance.GetData(fileName, key, string.Format("Type{0}", i))));
+            NodeParameter parameter = new NodeParameter();
+            parameter.parameterName = name;
+
+            parameter.parameterType = (int.Parse(TableRead.Instance.GetData(fileName, key, string.Format("Type{0}", i))));
             string value = TableRead.Instance.GetData(fileName, key, string.Format("Value{0}", i));
             // 根据类型将 value 解析为 int/float/bool/string 
-            if (parameter._parameterType == ParameterType.Int)
+            if (parameter.parameterType == (int)ParameterType.Int)
             {
                 parameter.intValue = int.Parse(value);
             }
-            else if (parameter._parameterType == ParameterType.Float)
+            else if (parameter.parameterType == (int)ParameterType.Float)
             {
                 parameter.floatValue = float.Parse(value);
             }
-            else if (parameter._parameterType == ParameterType.Bool)
+            else if (parameter.parameterType == (int)parameter.longValue)
+            {
+                parameter.longValue = long.Parse(value);
+            }
+            else if (parameter.parameterType == (int)ParameterType.Bool)
             {
                 parameter.boolValue = bool.Parse(value);
             }
-            else if (parameter._parameterType == ParameterType.String)
+            else if (parameter.parameterType == (int)ParameterType.String)
             {
                 parameter.stringValue = value;
             }
-            parameter._compare = (ParameterCompare)(int.Parse(TableRead.Instance.GetData(fileName, key, string.Format("Compare{0}", i))));
+            parameter.compare = (int.Parse(TableRead.Instance.GetData(fileName, key, string.Format("Compare{0}", i))));
             //将每个参数添加到集合中
             parameterList.Add(parameter);
         }

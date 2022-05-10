@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateReset : StateBase
+public class StateReset : PlayerStateBase
 {
     public StateReset()
     {

@@ -1,7 +1,6 @@
 FiniteStateMachine/Library/*
 FiniteStateMachine/obj/*
 FiniteStateMachine/Temp/*
-
 FiniteStateMachine/.vs/*
 
 *.csproj
